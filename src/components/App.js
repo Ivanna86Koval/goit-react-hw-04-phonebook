@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import {Container, Title, SubTitle } from './App.styled'
@@ -6,80 +6,73 @@ import {AddContactForm} from './AddContactForm/AddContactForm';
 import {Filter} from './Filter/Filter';
 import { ContactList } from "./ContactList/ContactList";
 
-export class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-  };
+const phoneContacts = [
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  ];
 
-componentDidMount(){
-  const savedContacts = localStorage.getItem('contacts');
-  if (savedContacts !== null) 
-  {this.setState({contacts: JSON.parse(savedContacts),
-  });
-}
-}
+  const App = () => {
+const [contacts, setContacts] = useState (() => {
+    return JSON.parse(window.localStorage.getItem('contacts')) ?? phoneContacts; 
+   });
 
-  componentDidUpdate (prevState, prevPops)
-   {if(prevState.contacts !== this.state.contacts)
-    {localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  }
-}
+  const [filter, setFilter] = useState ('');
 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+  useEffect(() => {
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-  handleSubmit = ({ name, number }) => {
+  const handleSubmit = ({ name, number }) => {
     const contact = {
       id: nanoid(),
       name,
       number,
     };
 
-    this.state.contacts.some(i => i.name === contact.name)
-      ? Notify.failure(`${name} is already in contacts`)
-      : this.setState(({ contacts }) => ({
-          contacts: [contact, ...contacts],
-        }));
-  };
+    const isInContacts = contacts.some(
+        ({ name }) =>
+          name.toLowerCase().trim() === contact.name.toLowerCase().trim()
+      );
+      if (isInContacts) {
+        alert(`${contact.name} is already in contacts`);
+        return;
+      }
 
-  handleDelete = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
-  };
+      setContacts(prevContacts => [
+        ...prevContacts,
+        { id: nanoid(), ...contact },
+      ]);
+    };
+ 
+    const handleChange = e => {
+        setFilter(e.target.value.trim());
+      };
 
-  //Notify.success('Contact deleted successfully');
+      const handleDelete = e => {
+        setContacts(prevContacts => 
+          prevContacts.filter(contact => contact.id !== e),
+        );
+      };
 
-  getFilteredContacts = () => {
-    const filterContactsList = this.state.contacts.filter(contact => {
-      return contact.name
-        .toLowerCase()
-        .includes(this.state.filter.toLowerCase());
-    });
-
-    return filterContactsList;
-  };
-
-  render() {
-    const { filter } = this.state;
+   const getFilteredContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(normalizedFilter)
+      );
+    };
+    const visibleContacts = getFilteredContacts();
 
     return (
       <Container>
         <Title>Phonebook</Title>
-        <AddContactForm handleSubmit={this.handleSubmit} />
+        <AddContactForm handleSubmit={handleSubmit} />
         <SubTitle>Contacts</SubTitle>
-        <Filter filter={filter} handleChange={this.handleChange} />
-        <ContactList contacts={this.getFilteredContacts()}
-          handleDelete={this.handleDelete}/>
+        <Filter filter={filter} handleChange={handleChange} />
+        <ContactList 
+        contacts={visibleContacts}
+        handleDelete={handleDelete}/>
       </Container>
     );
-  }
 };
