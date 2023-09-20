@@ -4,19 +4,14 @@ import { ContactListItemBtn } from './ContactList.styled';
 export const ContactList = ({ contacts, handleDelete }) => (
   <div>
     <ul>
-      {contacts.map((contact, id) => (
-        <li key={id}>
-          {contact.name}: {contact.number}
-          <ContactListItemBtn
-            type="button"
-            onChange={() => handleDelete(contact.id)}
-          >
-            Delete
-          </ContactListItemBtn>
-        </li>
-      ))}
-    </ul>
-  </div>
+  {contacts.map(contact => (
+    <li key={contact.id}>
+      {contact.name}: {contact.number}
+      <ContactListItemBtn onClick={() => handleDelete(contact.id)}>Delete</ContactListItemBtn>
+    </li>
+  ))}
+</ul>
+    </div>
 );
 
 

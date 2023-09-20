@@ -16,6 +16,20 @@ export class App extends Component {
     filter: '',
   };
 
+componentDidMount(){
+  const savedContacts = localStorage.getItem('contacts');
+  if (savedContacts !== null) 
+  {this.setState({contacts: JSON.parse(savedContacts),
+  });
+}
+}
+
+  componentDidUpdate (prevState, prevPops)
+   {if(prevState.contacts !== this.state.contacts)
+    {localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  }
+}
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -35,11 +49,13 @@ export class App extends Component {
         }));
   };
 
-  handleDelete = e => {
+  handleDelete = id => {
     this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== e),
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
+
+  //Notify.success('Contact deleted successfully');
 
   getFilteredContacts = () => {
     const filterContactsList = this.state.contacts.filter(contact => {
