@@ -1,39 +1,38 @@
 import styled from 'styled-components';
 
 export const Form = styled.form`
+     display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 3px solid rgb(240, 128, 128);
+    border-radius: 4px;
+`;
+
+export const Label = styled.label`
   display: flex;
   flex-direction: column;
+  margin-bottom: 16px;
+  color: #f08080;
+  font-size: 20px;
 `;
 
 export const FormItem = styled.input`
-  display: flex;
-  flex-direction: column;
-  margin: 0.5rem auto;
-  align-items: center;
-  text-align: left;
-  padding: 0.5rem 15rem 0.5rem 1rem;
+     padding: 8px 12px;
+    font: inherit;
+    cursor: pointer;
 `;
 
 export const FormBtn = styled.button`
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  background-color: rgba(23, 26, 32, 0.8);
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  flex-grow: 1;
-  font-family: SFProText-Regular, Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  height: 36px;
-  line-height: 20px;
-  margin-left: 8px;
-  margin-right: 6px;
-  min-width: 185px;
-  padding: 0 16px 0 16px;
-  color: white;
+    padding: 8px 12px;
+  font: inherit;
   cursor: pointer;
-  hover {
-    background-color: rgba(23, 26, 32, 1);
-    cursor: pointer;
-  }
+  border-radius: 4px;
+  border: 3px solid #f08080;
+  color: #f08080;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

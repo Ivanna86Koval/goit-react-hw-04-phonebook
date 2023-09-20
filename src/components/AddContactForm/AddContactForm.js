@@ -1,6 +1,6 @@
 import propTypes from 'prop-types';
 import { Component } from 'react'
-import {Form, FormItem, FormBtn} from './AddContactForm.styled'
+import {Form, Label, FormItem, FormBtn} from './AddContactForm.styled'
 
 export class AddContactForm extends Component {
   state = {
@@ -25,7 +25,7 @@ export class AddContactForm extends Component {
 
     return (
       <Form onSubmit={this.handleSubmit}>
-        <label>Name</label>
+        <Label>Name</Label>
         <FormItem
           type="text"
           name="name"
@@ -36,7 +36,7 @@ export class AddContactForm extends Component {
           value={name}
           onChange={this.handleChange}
         />
-        <label>Number</label>
+        <Label>Number</Label>
         <FormItem
           type="tel"
           name="number"

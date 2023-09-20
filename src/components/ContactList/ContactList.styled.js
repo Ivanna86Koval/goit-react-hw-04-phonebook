@@ -1,19 +1,35 @@
 import styled from 'styled-components';
 
-export const ContactListItemBtn = styled.button`
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  background-color: rgba(23, 26, 32, 0.8);
-  border: none;
-  border-radius: 7px;
-  color: #fff;
-  font-family: SFProText-Regular, Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  height: 36px;
-  line-height: 20px;
-  margin-left: 8px;
-  margin-right: 6px;
-  min-width: 50px;
-  padding: 0 16px 0 16px;
+export const List = styled.ul`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 400px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 3px solid #f08080;
+  list-style: none;
+`;
+
+export const Item = styled.li`
+  background-color: #ffffff;
+  border: 3px solid #f08080;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+`;
+
+export const ListItemBtn = styled.button`
+  padding: 4px 8px;
+  font: inherit;
   cursor: pointer;
+  border-radius: 4px 8px;
+  border: 3px solid #f08080;
+  display: flex;
+  align-items: center;
 `;

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import {Container, Title, SubTitle } from './App.styled'
 import {AddContactForm} from './AddContactForm/AddContactForm';
 import {Filter} from './Filter/Filter';
 import { ContactList } from "./ContactList/ContactList";
@@ -71,23 +72,14 @@ componentDidMount(){
     const { filter } = this.state;
 
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 20,
-          color: '#010101',
-        }}
-      >
-        <h1>Phonebook</h1>
+      <Container>
+        <Title>Phonebook</Title>
         <AddContactForm handleSubmit={this.handleSubmit} />
-        <h2>Contacts</h2>
+        <SubTitle>Contacts</SubTitle>
         <Filter filter={filter} handleChange={this.handleChange} />
-        <ContactList   contacts={this.getFilteredContacts()}
+        <ContactList contacts={this.getFilteredContacts()}
           handleDelete={this.handleDelete}/>
-      </div>
+      </Container>
     );
   }
 };
