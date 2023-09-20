@@ -26,6 +26,7 @@ export const FormItem = styled.input`
 
 export const FormBtn = styled.button`
     padding: 8px 12px;
+    margin-top: 16px;
   font: inherit;
   cursor: pointer;
   border-radius: 4px;
