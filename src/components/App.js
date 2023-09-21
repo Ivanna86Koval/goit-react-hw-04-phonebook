@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+//import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import {Container, Title, SubTitle } from './App.styled'
 import {AddContactForm} from './AddContactForm/AddContactForm';
 import {Filter} from './Filter/Filter';
@@ -13,8 +13,8 @@ const phoneContacts = [
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ];
 
-  const App = () => {
-const [contacts, setContacts] = useState (() => {
+export const App = () => {
+ const [contacts, setContacts] = useState (() => {
     return JSON.parse(window.localStorage.getItem('contacts')) ?? phoneContacts; 
    });
 
@@ -24,17 +24,18 @@ const [contacts, setContacts] = useState (() => {
     window.localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleSubmit = ({ name, number }) => {
+  /*const handleSubmit = ({ name, number }) => {
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-
+*/
+    const handleSubmit = contact => {
     const isInContacts = contacts.some(
-        ({ name }) =>
-          name.toLowerCase().trim() === contact.name.toLowerCase().trim()
+    ({ name }) => name.toLowerCase().trim() === contact.name.toLowerCase().trim()
       );
+
       if (isInContacts) {
         alert(`${contact.name} is already in contacts`);
         return;
@@ -46,22 +47,27 @@ const [contacts, setContacts] = useState (() => {
       ]);
     };
  
-    const handleChange = e => {
+     const handleChange = e => {
         setFilter(e.target.value.trim());
       };
 
-      const handleDelete = e => {
+      // Отримання відфільтрованих контактів.
+
+   const getFilteredContacts = () => {
+
+    const normalizedFilter = filter.toLowerCase();
+
+    return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(normalizedFilter)
+      );
+    };
+
+    const handleDelete = e => {
         setContacts(prevContacts => 
           prevContacts.filter(contact => contact.id !== e),
         );
       };
 
-   const getFilteredContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-        contact.name.toLowerCase().includes(normalizedFilter)
-      );
-    };
     const visibleContacts = getFilteredContacts();
 
     return (
@@ -76,3 +82,4 @@ const [contacts, setContacts] = useState (() => {
       </Container>
     );
 };
+

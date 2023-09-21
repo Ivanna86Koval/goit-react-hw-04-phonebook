@@ -1,31 +1,40 @@
+import { useState } from 'react';
+import { nanoid } from 'nanoid';
 import propTypes from 'prop-types';
-import { Component } from 'react'
 import {Form, Label, FormItem, FormBtn} from './AddContactForm.styled'
 
-export class AddContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
- 
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+export const AddContactForm = ({ handleSubmit }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleSubmit = e => {
+  const nameInputId = nanoid();
+  const numberInputId = nanoid();
+
+  const handleFormSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
-    this.props.handleSubmit(this.state);
+    handleSubmit({ name: name, number: number });
     form.reset();
   };
+ 
+  const handleChange = e => {
+    const { name, value } = e.target;
 
-  render() {
-    const { name, number } = this.state;
-
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <Label>Name</Label>
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setNumber(value);
+        break;
+      default:
+        return;
+    }
+  };
+   
+     return (
+      <Form onSubmit={handleFormSubmit}>
+        <Label htmlFor={nameInputId}>Name</Label>
         <FormItem
           type="text"
           name="name"
@@ -34,9 +43,9 @@ export class AddContactForm extends Component {
           required
           placeholder="Enter name"
           value={name}
-          onChange={this.handleChange}
+          onChange={handleChange}
         />
-        <Label>Number</Label>
+        <Label htmlFor={numberInputId}>Number</Label>
         <FormItem
           type="tel"
           name="number"
@@ -45,7 +54,7 @@ export class AddContactForm extends Component {
           required
           placeholder="Enter phone number"
           value={number}
-          onChange={this.handleChange}
+          onChange={handleChange}
         />
         <FormBtn type="submit">
           Add contact
@@ -53,7 +62,7 @@ export class AddContactForm extends Component {
       </Form>
     );
   }
-}
+
 AddContactForm.propTypes = {
   handleSubmit: propTypes.func.isRequired,
 };
