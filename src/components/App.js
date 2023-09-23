@@ -1,57 +1,46 @@
 import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-//import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import {Container, Title, SubTitle } from './App.styled'
 import {AddContactForm} from './AddContactForm/AddContactForm';
 import {Filter} from './Filter/Filter';
 import { ContactList } from "./ContactList/ContactList";
 
-const phoneContacts = [
+export const App = () => {
+  const phoneContacts = [
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ];
 
-export const App = () => {
- const [contacts, setContacts] = useState (() => {
-    return JSON.parse(window.localStorage.getItem('contacts')) ?? phoneContacts; 
-   });
-
-  const [filter, setFilter] = useState ('');
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(localStorage.getItem('contacts')) ?? phoneContacts
+  )
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  /*const handleSubmit = ({ name, number }) => {
-    const contact = {
-      id: nanoid(),
-      name,
-      number,
-    };
-*/
-    const handleSubmit = contact => {
-    const isInContacts = contacts.some(
-    ({ name }) => name.toLowerCase().trim() === contact.name.toLowerCase().trim()
-      );
+  const handleSubmit = contact => {
+    const isInContacts = contacts.some(el => {
+      return el.name.trim() === contact.name.trim();
+    })
 
-      if (isInContacts) {
-        alert(`${contact.name} is already in contacts`);
-        return;
-      }
+    if (isInContacts) {
+      Notify.failure(`${contact.name} is already in contacts`);
+      return;
+    }
 
-      setContacts(prevContacts => [
-        ...prevContacts,
-        { id: nanoid(), ...contact },
-      ]);
-    };
+    setContacts([...contacts, contact]);
+  };
+
  
      const handleChange = e => {
-        setFilter(e.target.value.trim());
+        setFilter(e.target.value);
       };
 
-      // Отримання відфільтрованих контактів.
+      // Отримання відфільтрованих контактів. Краще писати коментарі на англійський 
 
    const getFilteredContacts = () => {
 
@@ -62,22 +51,18 @@ export const App = () => {
       );
     };
 
-    const handleDelete = e => {
-        setContacts(prevContacts => 
-          prevContacts.filter(contact => contact.id !== e),
-        );
-      };
-
-    const visibleContacts = getFilteredContacts();
+  const handleDelete = id => {
+    setContacts(contacts.filter(el => el.id !== id));
+  };
 
     return (
       <Container>
         <Title>Phonebook</Title>
         <AddContactForm handleSubmit={handleSubmit} />
         <SubTitle>Contacts</SubTitle>
-        <Filter filter={filter} handleChange={handleChange} />
+        <Filter filter={handleChange} />
         <ContactList 
-        contacts={visibleContacts}
+        contacts={getFilteredContacts()}
         handleDelete={handleDelete}/>
       </Container>
     );

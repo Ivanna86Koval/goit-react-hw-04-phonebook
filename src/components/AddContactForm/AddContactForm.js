@@ -7,34 +7,27 @@ export const AddContactForm = ({ handleSubmit }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const nameInputId = nanoid();
-  const numberInputId = nanoid();
-
-  const handleFormSubmit = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    handleSubmit({ name: name, number: number });
-    form.reset();
-  };
- 
-  const handleChange = e => {
-    const { name, value } = e.target;
-
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        return;
+      const handleChange = (e) => {
+        switch (e.target.name) {
+            case "name":
+                return setName(e.currentTarget.value)
+            case "number":
+                return setNumber(e.currentTarget.value)
+            default:
+                break;
+        }
     }
-  };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        handleSubmit({ id: nanoid(5), name, number });
+        setName("");
+        setNumber("");
+    }
    
      return (
       <Form onSubmit={handleFormSubmit}>
-        <Label htmlFor={nameInputId}>Name</Label>
+        <Label>Name</Label>
         <FormItem
           type="text"
           name="name"
@@ -45,7 +38,7 @@ export const AddContactForm = ({ handleSubmit }) => {
           value={name}
           onChange={handleChange}
         />
-        <Label htmlFor={numberInputId}>Number</Label>
+        <Label>Number</Label>
         <FormItem
           type="tel"
           name="number"
